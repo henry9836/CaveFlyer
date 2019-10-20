@@ -1,5 +1,5 @@
 //
-//  GameScene.swift
+//  MainMenu.swift
 //  CaveFlyer
 //
 //  Created by Henry Oliver on 21/10/19.
@@ -9,6 +9,6 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
-    //Main Game
+class MainMenuScene: SKScene {
+    //Main Menu
 }
