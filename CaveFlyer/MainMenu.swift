@@ -11,6 +11,7 @@ import GameplayKit
 
 class MainMenuScene: SKScene {
     var titleText: SKLabelNode!
+    var playText: SKLabelNode!
     var heli: SKSpriteNode!
     
     override func didMove(to view: SKView){
@@ -24,9 +25,24 @@ class MainMenuScene: SKScene {
         titleText.text = "Cave Flyer"
         titleText.fontSize = 32.0
         //mainMenuTitle.fontName = "AvenirNext-Bold"
-        titleText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+100)
+        titleText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+150)
         titleText.fontColor = UIColor.white
         self.addChild(titleText)
+        
+        playText = SKLabelNode()
+        playText.text = "Tap To Start"
+        playText.fontSize = 14.0
+        //mainMenuTitle.fontName = "AvenirNext-Bold"
+        playText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+100)
+        playText.fontColor = UIColor.white
+        self.addChild(playText)
+        
+        //Animation
+        
+        let fadeIn = SKAction.fadeAlpha(to: 1, duration: 1.2)
+        let fadeOut = SKAction.fadeAlpha(to: 0, duration: 1.2)
+        let fadeAction = SKAction.sequence([fadeIn, fadeOut])
+        playText.run(SKAction.repeatForever(fadeAction))
     }
     
     func CreateHeli(){

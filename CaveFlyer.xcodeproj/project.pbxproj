@@ -16,6 +16,7 @@
 		C3842744235CFB4300E30A44 /* CaveFlyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3842743235CFB4300E30A44 /* CaveFlyerTests.swift */; };
 		C384274F235CFB4300E30A44 /* CaveFlyerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384274E235CFB4300E30A44 /* CaveFlyerUITests.swift */; };
 		C384275D235CFFC000E30A44 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384275C235CFFC000E30A44 /* MainMenu.swift */; };
+		C3842761235D122B00E30A44 /* Tutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3842760235D122B00E30A44 /* Tutorial.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		C384274E235CFB4300E30A44 /* CaveFlyerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaveFlyerUITests.swift; sourceTree = "<group>"; };
 		C3842750235CFB4300E30A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C384275C235CFFC000E30A44 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
+		C3842760235D122B00E30A44 /* Tutorial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tutorial.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,8 +104,9 @@
 			isa = PBXGroup;
 			children = (
 				C3842728235CFB4200E30A44 /* AppDelegate.swift */,
-				C384272E235CFB4200E30A44 /* GameScene.swift */,
 				C384275C235CFFC000E30A44 /* MainMenu.swift */,
+				C3842760235D122B00E30A44 /* Tutorial.swift */,
+				C384272E235CFB4200E30A44 /* GameScene.swift */,
 				C3842730235CFB4200E30A44 /* GameViewController.swift */,
 				C3842732235CFB4200E30A44 /* Main.storyboard */,
 				C3842735235CFB4300E30A44 /* Assets.xcassets */,
@@ -266,6 +269,7 @@
 				C3842731235CFB4200E30A44 /* GameViewController.swift in Sources */,
 				C3842729235CFB4200E30A44 /* AppDelegate.swift in Sources */,
 				C384275D235CFFC000E30A44 /* MainMenu.swift in Sources */,
+				C3842761235D122B00E30A44 /* Tutorial.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
