@@ -14,12 +14,22 @@ class MainMenuScene: SKScene {
     var playText: SKLabelNode!
     var heli: SKSpriteNode!
     
+    //On start
     override func didMove(to view: SKView){
         //self.backgroundColor = UIColor.gray
         CreateText()
         CreateHeli()
     }
     
+    //User tapped
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let newScene = TutorialScene(size: (self.view?.bounds.size)!)
+        let transition = SKTransition.reveal(with: .up, duration: 2)
+        self.view?.presentScene(newScene, transition: transition)
+        transition.pausesOutgoingScene = true
+    }
+    
+    //Create text nodes
     func CreateText(){
         titleText = SKLabelNode()
         titleText.text = "Cave Flyer"
@@ -45,6 +55,7 @@ class MainMenuScene: SKScene {
         playText.run(SKAction.repeatForever(fadeAction))
     }
     
+    //create heli node
     func CreateHeli(){
         
         heli = SKSpriteNode(texture: SKTexture(imageNamed: "f1"), size: CGSize(width: 300, height: 300))
