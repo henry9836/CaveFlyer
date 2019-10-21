@@ -12,6 +12,7 @@ import GameplayKit
 class MainMenuScene: SKScene {
     var titleText: SKLabelNode!
     var playText: SKLabelNode!
+    var tutText: SKLabelNode!
     var heli: SKSpriteNode!
     var longPressGestureRecognizer = UILongPressGestureRecognizer()
     var tapGestureRecognizer = UITapGestureRecognizer()
@@ -72,6 +73,14 @@ class MainMenuScene: SKScene {
         playText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+100)
         playText.fontColor = UIColor.white
         self.addChild(playText)
+        
+        tutText = SKLabelNode()
+        tutText.text = "Hold For Tutorial"
+        tutText.fontSize = 10.0
+        //mainMenuTitle.fontName = "AvenirNext-Bold"
+        tutText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+80)
+        tutText.fontColor = UIColor.white
+        self.addChild(tutText)
         
         //Animation
         
