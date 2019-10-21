@@ -13,20 +13,46 @@ class MainMenuScene: SKScene {
     var titleText: SKLabelNode!
     var playText: SKLabelNode!
     var heli: SKSpriteNode!
+    var longPressGestureRecognizer = UILongPressGestureRecognizer()
+    var tapGestureRecognizer = UITapGestureRecognizer()
     
     //On start
     override func didMove(to view: SKView){
         //self.backgroundColor = UIColor.gray
         CreateText()
         CreateHeli()
+        CreateGestures()
     }
     
-    //User tapped
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    //Gesture Inputs
+    @objc func longPress(sender: UILongPressGestureRecognizer){
         let newScene = TutorialScene(size: (self.view?.bounds.size)!)
-        let transition = SKTransition.reveal(with: .up, duration: 2)
+        let transition = SKTransition.reveal(with: .down, duration: 0.2)
         self.view?.presentScene(newScene, transition: transition)
         transition.pausesOutgoingScene = true
+    }
+    
+    @objc func tap(sender: UITapGestureRecognizer){
+        let newScene = GameScene(size: (self.view?.bounds.size)!)
+        let transition = SKTransition.reveal(with: .up, duration: 0.2)
+        self.view?.presentScene(newScene, transition: transition)
+        transition.pausesOutgoingScene = true
+    }
+    
+    //Create Gestures
+    func CreateGestures(){
+        //Long press
+        guard let view = view else { return }
+        
+        longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPress))
+        longPressGestureRecognizer.minimumPressDuration = 1
+        view.addGestureRecognizer(longPressGestureRecognizer)
+        
+        //Tap
+        tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(tap))
+        tapGestureRecognizer.numberOfTapsRequired = 1
+        view.addGestureRecognizer(tapGestureRecognizer)
+        
     }
     
     //Create text nodes
