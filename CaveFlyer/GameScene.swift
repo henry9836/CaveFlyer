@@ -13,17 +13,23 @@ class GameScene: SKScene {
     //Main Game
     
     var heli: SKSpriteNode!
-    var holdGestureRecognizer = UILongPressGestureRecognizer()
+    var cameraNode: SKCameraNode!
     var holding: Bool?
     var touchFlySide: Bool? //true = flyUp, //false = shoot
+    
+    var heliSpeed: CGFloat?
     //On start
     override func didMove(to view: SKView){
         //self.backgroundColor = UIColor.gray
         holding = false
         touchFlySide = false
+        heliSpeed = 3
+        
         RemoveGestures()
+        CreateCamera()
         CreateText()
         CreateHeli()
+       
     }
     
     //Input
@@ -47,7 +53,13 @@ class GameScene: SKScene {
     
     //Gameloop
     override func update(_ currentTime: TimeInterval) {
-        //
+        //move camera to heli
+        cameraNode.position.x = heli.position.x
+        
+        //move heli forwards
+        heli.position.x += (heliSpeed)!;
+        
+        //player input
         if (holding == true){
             if (touchFlySide == true){
                 //cap fly up speed
@@ -78,6 +90,15 @@ class GameScene: SKScene {
     }
     
     func CreateText(){
+        
+    }
+    
+    func CreateCamera(){
+        cameraNode = SKCameraNode()
+        cameraNode?.setScale(1)
+        cameraNode?.position = CGPoint(x: 0, y: 0)
+        self.camera = cameraNode
+        self.addChild(cameraNode)
         
     }
     
