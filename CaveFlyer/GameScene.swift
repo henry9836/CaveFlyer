@@ -12,7 +12,7 @@ import GameplayKit
 class GameScene: SKScene {
     //Main Game
     
-    let deathPlane: Int = -5300
+    let deathPlane: Int = -5500
     
     var heli: SKSpriteNode!
     var tilemap: SKSpriteNode!
@@ -20,10 +20,12 @@ class GameScene: SKScene {
     var tileMap: SKNode!
     var holding: Bool?
     var distanceText: SKLabelNode!
+    var altText: SKLabelNode!
     var startGameText: SKLabelNode!
     var touchFlySide: Bool? //true = flyUp, //false = shoot
     var gameStarted: Bool = false
     var heliSpeed: CGFloat?
+    var dead: Bool = false
     //On start
     override func didMove(to view: SKView){
         //self.backgroundColor = UIColor.gray
@@ -65,12 +67,27 @@ class GameScene: SKScene {
         if (gameStarted == true){
             //Increase speed over time
             heliSpeed = heliSpeed! + CGFloat(0.1)
-            
-            distanceText.text = "Distance Flown: \(Int(heli.position.x))"
-            //Check if we hit the ground
+
+            //Get Y
             let yPos = heli.position.y
+            
+            //Death: -5000
+            //y: 0
+            
+            //Alt y: 0 = 5000
+            //y + -death = 5000
+            
+            //Alt y: -5000
+            //y + -death = 0
+            
+            
+            
+            //Update Text
+            distanceText.text = "Distance Flown: \(Int(heli.position.x)/10)"
+            altText.text = "Altitude: \(Int(Int(yPos)-deathPlane)-1)"
+
             //If we have not hit the ground
-            if (Int(yPos) > deathPlane){
+            if (Int(yPos) > deathPlane && dead == false){
                 //move heli forwards
                 heli.position.x += (heliSpeed)!;
             }
@@ -81,9 +98,11 @@ class GameScene: SKScene {
             //move tilemap to make infinite
             WrapTileMap()
 
-            if (Int(yPos) < deathPlane){
+            if (Int(yPos) < deathPlane || dead){
                 print("Dead")
                 //Stop heli
+                dead = true
+                heli.position.y = CGFloat(deathPlane)
                 heli.physicsBody?.affectedByGravity = false
                 heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
                 
@@ -139,6 +158,13 @@ class GameScene: SKScene {
         distanceText.position = CGPoint(x: -90 * cameraNode.xScale, y: 50 * cameraNode.yScale)
         distanceText.fontColor = UIColor.white
         cameraNode.addChild(distanceText) //parent to cam
+        
+        altText = SKLabelNode()
+        altText.text = ""
+        altText.fontSize = 32.0
+        altText.position = CGPoint(x: 90 * cameraNode.xScale, y: 50 * cameraNode.yScale)
+        altText.fontColor = UIColor.white
+        cameraNode.addChild(altText) //parent to cam
         
         startGameText = SKLabelNode()
         startGameText.text = "Tap to fly"
