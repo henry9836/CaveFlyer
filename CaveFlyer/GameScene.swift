@@ -121,7 +121,7 @@ class GameScene: SKScene {
     }
     
     func WrapTileMap(){
-        let tileSize = 1000
+        let tileSize = 5400
         let d = heli.position.x - tileMap.position.x
         if (d > CGFloat(tileSize - (tileSize/10))){
             tileMap.position.x = heli.position.x
