@@ -12,8 +12,12 @@ import GameplayKit
 class GameScene: SKScene {
     //Main Game
     
+    let deathPlane: Int = -5400
+    
     var heli: SKSpriteNode!
+    var tilemap: SKSpriteNode!
     var cameraNode: SKCameraNode!
+    var tileMap: SKNode!
     var holding: Bool?
     var touchFlySide: Bool? //true = flyUp, //false = shoot
     
@@ -26,6 +30,7 @@ class GameScene: SKScene {
         heliSpeed = 3
         
         RemoveGestures()
+        CreateTileMap()
         CreateCamera()
         CreateText()
         CreateHeli()
@@ -53,11 +58,18 @@ class GameScene: SKScene {
     
     //Gameloop
     override func update(_ currentTime: TimeInterval) {
-        //move camera to heli
-        cameraNode.position.x = heli.position.x
-        
+
         //move heli forwards
         heli.position.x += (heliSpeed)!;
+
+        //move camera to heli
+        cameraNode.position = heli.position
+        
+        //Check if we hit the ground
+        let yPos = heli.position.y
+        if (Int(yPos) < deathPlane){
+            print("Dead")
+        }
         
         //player input
         if (holding == true){
@@ -66,11 +78,11 @@ class GameScene: SKScene {
                 let yVelo: Float
                 yVelo = Float(heli.physicsBody?.velocity.dy ?? CGFloat(0))
                 
-                if (yVelo < 400){
+                if (yVelo < 600){
                     //fly up
-                    heli.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy:50.0))
+                    heli.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy:100.0))
                     
-                    print(yVelo)
+                    print(heli.position.y)
                 }
             }
             else{
@@ -93,9 +105,47 @@ class GameScene: SKScene {
         
     }
     
+    func CreateTileMap(){
+        //Create main node
+        tileMap = SKNode()
+        addChild(tileMap)
+        
+        //scale down tile map so we can see more
+        tileMap.setScale(CGFloat(0.8))
+        
+        //Load TileSet
+        let tileSet = SKTileSet(named: "GameTileSet")
+        let tileSize = CGSize(width: 128, height: 128)
+        let columns = Int(tileSize.width)
+        let rows = Int(tileSize.height)
+        
+        //Load Tiles
+        let rockTile = tileSet?.tileGroups.first { $0.name == "Cobblestone" }
+        let groundTile = tileSet?.tileGroups.first { $0.name == "Sand" }
+        
+        let backgroundLayer = SKTileMapNode(tileSet: tileSet!, columns: columns, rows: rows, tileSize: tileSize)
+        backgroundLayer.fill(with: rockTile)
+        
+        let groundLayer = SKTileMapNode(tileSet: tileSet!, columns: columns, rows: rows, tileSize: tileSize)
+        
+        //Place ground tiles
+        for column in 0 ..< columns {
+            for row in 0 ..< rows{
+                //Only set bottom few tiles to ground
+                if (row < (0 + (rows/10))){
+                    groundLayer.setTileGroup(groundTile, forColumn: column, row: row)
+                }
+            }
+        }
+        
+        tileMap.addChild(backgroundLayer)
+        tileMap.addChild(groundLayer)
+        
+    }
+    
     func CreateCamera(){
         cameraNode = SKCameraNode()
-        cameraNode?.setScale(1)
+        cameraNode?.setScale(3)
         cameraNode?.position = CGPoint(x: 0, y: 0)
         self.camera = cameraNode
         self.addChild(cameraNode)
