@@ -77,7 +77,9 @@ class GameScene: SKScene {
 
             //move camera to heli
             cameraNode.position = heli.position
-            
+
+            //move tilemap to make infinite
+            WrapTileMap()
 
             if (Int(yPos) < deathPlane){
                 print("Dead")
@@ -94,7 +96,7 @@ class GameScene: SKScene {
                         let yVelo: Float
                         yVelo = Float(heli.physicsBody?.velocity.dy ?? CGFloat(0))
                         
-                        if (yVelo < 600){
+                        if (yVelo < 500){
                             //fly up
                             heli.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy:100.0))
                             
@@ -115,6 +117,14 @@ class GameScene: SKScene {
         }
         else{
             heli.physicsBody?.affectedByGravity = false
+        }
+    }
+    
+    func WrapTileMap(){
+        let tileSize = 1000
+        let d = heli.position.x - tileMap.position.x
+        if (d > CGFloat(tileSize - (tileSize/10))){
+            tileMap.position.x = heli.position.x
         }
     }
     
