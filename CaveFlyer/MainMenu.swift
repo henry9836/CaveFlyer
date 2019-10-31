@@ -61,7 +61,7 @@ class MainMenuScene: SKScene {
         titleText = SKLabelNode()
         titleText.text = "Cave Flyer"
         titleText.fontSize = 32.0
-        //mainMenuTitle.fontName = "AvenirNext-Bold"
+        titleText.fontName = "Copperplate"
         titleText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+150)
         titleText.fontColor = UIColor.white
         self.addChild(titleText)
@@ -69,7 +69,7 @@ class MainMenuScene: SKScene {
         playText = SKLabelNode()
         playText.text = "Tap To Start"
         playText.fontSize = 14.0
-        //mainMenuTitle.fontName = "AvenirNext-Bold"
+        playText.fontName = "Copperplate"
         playText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+100)
         playText.fontColor = UIColor.white
         self.addChild(playText)
@@ -77,7 +77,7 @@ class MainMenuScene: SKScene {
         tutText = SKLabelNode()
         tutText.text = "Hold For Tutorial"
         tutText.fontSize = 10.0
-        //mainMenuTitle.fontName = "AvenirNext-Bold"
+        tutText.fontName = "Copperplate"
         tutText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+80)
         tutText.fontColor = UIColor.white
         self.addChild(tutText)

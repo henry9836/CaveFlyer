@@ -80,8 +80,6 @@ class GameScene: SKScene {
             //Alt y: -5000
             //y + -death = 0
             
-            
-            
             //Update Text
             distanceText.text = "Distance Flown: \(Int(heli.position.x)/10)"
             altText.text = "Altitude: \(Int(Int(yPos)-deathPlane)-1)"
@@ -154,6 +152,7 @@ class GameScene: SKScene {
     func CreateText(){
         distanceText = SKLabelNode()
         distanceText.text = ""
+        distanceText.fontName = "Copperplate"
         distanceText.fontSize = 32.0
         distanceText.position = CGPoint(x: -90 * cameraNode.xScale, y: 50 * cameraNode.yScale)
         distanceText.fontColor = UIColor.white
@@ -161,12 +160,14 @@ class GameScene: SKScene {
         
         altText = SKLabelNode()
         altText.text = ""
+        altText.fontName = "Copperplate"
         altText.fontSize = 32.0
         altText.position = CGPoint(x: 90 * cameraNode.xScale, y: 50 * cameraNode.yScale)
         altText.fontColor = UIColor.white
         cameraNode.addChild(altText) //parent to cam
         
         startGameText = SKLabelNode()
+        startGameText.fontName = "Courier"
         startGameText.text = "Tap to fly"
         startGameText.fontSize = 300.0
         startGameText.position = CGPoint(x: 0, y: 0)
