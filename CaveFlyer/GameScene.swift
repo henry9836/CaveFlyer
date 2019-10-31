@@ -13,8 +13,11 @@ class GameScene: SKScene {
     //Main Game
     
     let deathPlane: Int = -5500
-    let ceilingPlane: Int = 6550
+    let ceilingPlane: Int = -4300
     
+    var ceiling: SKShapeNode!
+    var ceilingVis: SKShapeNode!
+    var floor: SKShapeNode!
     var heli: SKSpriteNode!
     var tilemap: SKSpriteNode!
     var cameraNode: SKCameraNode!
@@ -27,18 +30,20 @@ class GameScene: SKScene {
     var touchFlySide: Bool? //true = flyUp, //false = shoot
     var gameStarted: Bool = false
     var heliSpeed: CGFloat?
+    let maxSpeed: Int = 40
     var dead: Bool = false
     //On start
     override func didMove(to view: SKView){
         //self.backgroundColor = UIColor.gray
         holding = false
         touchFlySide = false
-        heliSpeed = 3
+        heliSpeed = 10
         
         RemoveGestures()
         CreateTileMap()
         CreateCamera()
         CreateHeli()
+        CreateShapes()
         CreateText()
        
     }
@@ -88,8 +93,9 @@ class GameScene: SKScene {
        
         if (gameStarted == true){
             //Increase speed over time
-            heliSpeed = heliSpeed! + CGFloat(0.05)
-
+            if (heliSpeed! < CGFloat(maxSpeed)){
+                heliSpeed = heliSpeed! + CGFloat(0.05)
+            }
             //Get Y
             let yPos = heli.position.y
             
@@ -230,7 +236,7 @@ class GameScene: SKScene {
         startGameText.fontName = "Courier"
         startGameText.text = "Tap to fly"
         startGameText.fontSize = 300.0
-        startGameText.position = CGPoint(x: 0, y: 0)
+        startGameText.position = CGPoint(x: 0, y: deathPlane+650)
         startGameText.fontColor = UIColor.white
         self.addChild(startGameText) //parent to cam
     }
@@ -276,7 +282,7 @@ class GameScene: SKScene {
     func CreateCamera(){
         cameraNode = SKCameraNode()
         cameraNode?.setScale(3)
-        cameraNode?.position = CGPoint(x: 0, y: 0)
+        cameraNode?.position = CGPoint(x: 0, y: deathPlane+650)
         self.camera = cameraNode
         self.addChild(cameraNode)
         
@@ -284,7 +290,7 @@ class GameScene: SKScene {
     
     func CreateHeli(){
         heli = SKSpriteNode(texture: SKTexture(imageNamed: "f1"), size: CGSize(width: 100, height: 100))
-        heli.position = CGPoint(x: -1000, y: 0)//25 - 100
+        heli.position = CGPoint(x: -1000, y: deathPlane+650)//25 - 100
         heli.zRotation = (-25.0 * CGFloat(Double.pi/180.0))
         
         //Add Physics
@@ -302,6 +308,31 @@ class GameScene: SKScene {
         heli.run(SKAction.repeatForever(flyAction))
         
         self.addChild(heli)
+        
+    }
+    
+    func CreateShapes(){
+        ceiling = SKShapeNode(rectOf: CGSize(width: 1000, height: 100))
+        ceiling.position = CGPoint(x: 0, y: ceilingPlane)
+        ceilingVis = SKShapeNode(rectOf: CGSize(width: 10000000, height: 10000000))
+        ceilingVis.position = CGPoint(x: 0, y: ceilingPlane + (10000000/2))
+        ceilingVis.fillColor = UIColor.darkGray
+        
+        ceiling.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1000, height: 1))
+        ceiling.physicsBody?.affectedByGravity = false
+        ceiling.physicsBody?.isDynamic = false
+        
+        self.addChild(ceiling)
+        self.addChild(ceilingVis)
+        
+        floor = SKShapeNode(rectOf: CGSize(width: 1000, height: 100))
+        floor.position = CGPoint(x: 0, y: deathPlane)
+        
+        floor.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1000, height: 1))
+        floor.physicsBody?.affectedByGravity = false
+        floor.physicsBody?.isDynamic = false
+        
+        self.addChild(floor)
         
     }
 }
