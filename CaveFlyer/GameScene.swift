@@ -83,7 +83,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         else{
             if let location =  touches.first?.location(in: self.view){
                 if (location.x < self.frame.midX){ //Left Side = restart
-                    heli.position = CGPoint(x: 0, y: 0) //Reset pos
+                    heli.position = CGPoint(x: -1000, y: deathPlane+650)
+                    heliSpeed = 10
                     heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0) //Reset physics
                     tileMap.position.x = heli.position.x
                     scoreText.text = ""
