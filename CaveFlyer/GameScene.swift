@@ -9,7 +9,7 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     //Main Game
     
     let deathPlane: Int = -5500
@@ -32,12 +32,27 @@ class GameScene: SKScene {
     var heliSpeed: CGFloat?
     let maxSpeed: Int = 40
     var dead: Bool = false
+    
+    enum BitMasks{
+        static let kill: UInt32 = 0b001
+        static let heli: UInt32 = 0b010
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        //collision with death spot
+        if (contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask == BitMasks.heli | BitMasks.kill){
+            dead = true
+        }
+    }
+    
     //On start
     override func didMove(to view: SKView){
         //self.backgroundColor = UIColor.gray
         holding = false
         touchFlySide = false
         heliSpeed = 10
+        
+        physicsWorld.contactDelegate = self
         
         RemoveGestures()
         CreateTileMap()
@@ -91,6 +106,10 @@ class GameScene: SKScene {
     //Gameloop
     override func update(_ currentTime: TimeInterval) {
        
+        //move death planes with heli
+        floor.position.x = heli.position.x
+        ceiling.position.x = heli.position.x
+        
         if (gameStarted == true){
             //Increase speed over time
             if (heliSpeed! < CGFloat(maxSpeed)){
@@ -299,7 +318,10 @@ class GameScene: SKScene {
         heli.physicsBody?.isDynamic = true
         heli.physicsBody?.allowsRotation = false
         heli.physicsBody?.mass = 1.0
-        
+        heli.physicsBody?.categoryBitMask = BitMasks.heli;
+        //heli.physicsBody?.contactTestBitMask = BitMasks.kill | CategoryBitMask.enemy;
+        heli.physicsBody?.contactTestBitMask = BitMasks.kill;
+        heli.name = "heli"
         
         
         let heliAtlas = SKTextureAtlas(named: "Helicopter")
@@ -314,6 +336,7 @@ class GameScene: SKScene {
     func CreateShapes(){
         ceiling = SKShapeNode(rectOf: CGSize(width: 1000, height: 100))
         ceiling.position = CGPoint(x: 0, y: ceilingPlane)
+        ceiling.name = "topKill"
         ceilingVis = SKShapeNode(rectOf: CGSize(width: 10000000, height: 10000000))
         ceilingVis.position = CGPoint(x: 0, y: ceilingPlane + (10000000/2))
         ceilingVis.fillColor = UIColor.darkGray
@@ -321,16 +344,20 @@ class GameScene: SKScene {
         ceiling.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1000, height: 1))
         ceiling.physicsBody?.affectedByGravity = false
         ceiling.physicsBody?.isDynamic = false
+        ceiling.physicsBody?.categoryBitMask = BitMasks.kill;
+        ceiling.physicsBody?.contactTestBitMask = BitMasks.heli;
         
         self.addChild(ceiling)
         self.addChild(ceilingVis)
         
         floor = SKShapeNode(rectOf: CGSize(width: 1000, height: 100))
         floor.position = CGPoint(x: 0, y: deathPlane)
-        
+        floor.name = "bottomKill"
         floor.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1000, height: 1))
         floor.physicsBody?.affectedByGravity = false
         floor.physicsBody?.isDynamic = false
+        floor.physicsBody?.categoryBitMask = BitMasks.kill;
+        floor.physicsBody?.contactTestBitMask = BitMasks.heli;
         
         self.addChild(floor)
         
