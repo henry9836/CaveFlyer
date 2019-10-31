@@ -13,6 +13,7 @@ class GameScene: SKScene {
     //Main Game
     
     let deathPlane: Int = -5500
+    let ceilingPlane: Int = 6550
     
     var heli: SKSpriteNode!
     var tilemap: SKSpriteNode!
@@ -21,6 +22,7 @@ class GameScene: SKScene {
     var holding: Bool?
     var distanceText: SKLabelNode!
     var altText: SKLabelNode!
+    var scoreText: SKLabelNode!
     var startGameText: SKLabelNode!
     var touchFlySide: Bool? //true = flyUp, //false = shoot
     var gameStarted: Bool = false
@@ -66,24 +68,21 @@ class GameScene: SKScene {
        
         if (gameStarted == true){
             //Increase speed over time
-            heliSpeed = heliSpeed! + CGFloat(0.1)
+            heliSpeed = heliSpeed! + CGFloat(0.05)
 
             //Get Y
             let yPos = heli.position.y
-            
-            //Death: -5000
-            //y: 0
-            
-            //Alt y: 0 = 5000
-            //y + -death = 5000
-            
-            //Alt y: -5000
-            //y + -death = 0
             
             //Update Text
             distanceText.text = "Distance Flown: \(Int(heli.position.x)/10)"
             altText.text = "Altitude: \(Int(Int(yPos)-deathPlane)-1)"
 
+            //Are we going falling too fast?
+            let veloY = (heli.physicsBody?.velocity.dy)!
+            if (Float(veloY) < -470.0){
+                heli.physicsBody?.velocity.dy = -470.0
+            }
+            
             //If we have not hit the ground
             if (Int(yPos) > deathPlane && dead == false){
                 //move heli forwards
@@ -96,13 +95,43 @@ class GameScene: SKScene {
             //move tilemap to make infinite
             WrapTileMap()
 
-            if (Int(yPos) < deathPlane || dead){
+            //Check if we should be dead
+            print(String(Int(yPos)) + ":" + String(ceilingPlane))
+            if ((Int(yPos) < deathPlane) || (Int(yPos) > ceilingPlane)){
+                dead = true
+            }
+            
+            if (dead){
                 print("Dead")
                 //Stop heli
                 dead = true
-                heli.position.y = CGFloat(deathPlane)
+                
                 heli.physicsBody?.affectedByGravity = false
                 heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+                if (Int(yPos) < deathPlane){
+                    heli.position.y = CGFloat(deathPlane)
+                }
+                else if (Int(yPos) > ceilingPlane){
+                    heli.position.y = CGFloat(ceilingPlane)
+                }
+                
+                //Display score
+                
+                if (scoreText.text == ""){
+                
+                    let score = (Int(heli.position.x)/10)
+                    
+                    //Set current score
+                    UserDefaults.standard.set(score, forKey: "currentScore")
+                    //Check Highscore
+                    if (UserDefaults.standard.integer(forKey: "highScore") < score){
+                        UserDefaults.standard.set(score, forKey: "highScore")
+                        scoreText.text = "Gameover\nNew HighScore!\nScore: " + String(score)
+                    }
+                    else{
+                        scoreText.text = "Gameover\nScore: " + String(score) + "\n\nHighscore: " + String(UserDefaults.standard.integer(forKey: "highScore"))
+                    }
+                }
                 
             }
             else{
@@ -154,7 +183,7 @@ class GameScene: SKScene {
         distanceText.text = ""
         distanceText.fontName = "Copperplate"
         distanceText.fontSize = 32.0
-        distanceText.position = CGPoint(x: -90 * cameraNode.xScale, y: 50 * cameraNode.yScale)
+        distanceText.position = CGPoint(x: -85 * cameraNode.xScale, y: 50 * cameraNode.yScale)
         distanceText.fontColor = UIColor.white
         cameraNode.addChild(distanceText) //parent to cam
         
@@ -165,6 +194,15 @@ class GameScene: SKScene {
         altText.position = CGPoint(x: 90 * cameraNode.xScale, y: 50 * cameraNode.yScale)
         altText.fontColor = UIColor.white
         cameraNode.addChild(altText) //parent to cam
+        
+        scoreText = SKLabelNode()
+        scoreText.text = ""
+        scoreText.numberOfLines = 0
+        scoreText.fontName = "Copperplate"
+        scoreText.fontSize = 32.0
+        scoreText.position = CGPoint(x: 0, y: 0)
+        scoreText.fontColor = UIColor.red
+        cameraNode.addChild(scoreText) //parent to cam
         
         startGameText = SKLabelNode()
         startGameText.fontName = "Courier"
