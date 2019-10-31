@@ -48,14 +48,34 @@ class GameScene: SKScene {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         gameStarted = true
         holding = true
-        if let location =  touches.first?.location(in: self.view){
-            if (location.x < self.frame.midX){ //user tapped on left side of screen
-                touchFlySide = true //shoot and fly
+        if (dead == false){
+            if let location =  touches.first?.location(in: self.view){
+                if (location.x < self.frame.midX){ //user tapped on left side of screen
+                    touchFlySide = true //shoot and fly
+                }
+                else{ //user tapped on right side of screen
+                    touchFlySide = false //shoot
+                }
+                
             }
-            else{ //user tapped on right side of screen
-                touchFlySide = false //shoot
+        }
+        //Game is over
+        else{
+            if let location =  touches.first?.location(in: self.view){
+                if (location.x < self.frame.midX){ //Left Side = restart
+                    heli.position = CGPoint(x: 0, y: 0) //Reset pos
+                    heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0) //Reset physics
+                    tileMap.position.x = heli.position.x
+                    scoreText.text = ""
+                    dead = false
+                }
+                else{ //Right Side = Quit to main menu
+                    let newScene = MainMenuScene(size: (self.view?.bounds.size)!)
+                    let transition = SKTransition.reveal(with: .down, duration: 0.2)
+                    self.view?.presentScene(newScene, transition: transition)
+                    transition.pausesOutgoingScene = true
+                }
             }
-            
         }
     }
     
@@ -74,7 +94,7 @@ class GameScene: SKScene {
             let yPos = heli.position.y
             
             //Update Text
-            distanceText.text = "Distance Flown: \(Int(heli.position.x)/10)"
+            distanceText.text = "Distance Flown: \(Int(heli.position.x+1000)/10)"
             altText.text = "Altitude: \(Int(Int(yPos)-deathPlane)-1)"
 
             //Are we going falling too fast?
@@ -91,6 +111,7 @@ class GameScene: SKScene {
 
             //move camera to heli
             cameraNode.position = heli.position
+            cameraNode.position.x += 1000;
 
             //move tilemap to make infinite
             WrapTileMap()
@@ -106,6 +127,9 @@ class GameScene: SKScene {
                 //Stop heli
                 dead = true
                 
+                distanceText.text = "Restart"
+                altText.text = "Quit"
+                
                 heli.physicsBody?.affectedByGravity = false
                 heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
                 if (Int(yPos) < deathPlane){
@@ -119,7 +143,7 @@ class GameScene: SKScene {
                 
                 if (scoreText.text == ""){
                 
-                    let score = (Int(heli.position.x)/10)
+                    let score = (Int(heli.position.x+1000)/10)
                     
                     //Set current score
                     UserDefaults.standard.set(score, forKey: "currentScore")
@@ -138,7 +162,7 @@ class GameScene: SKScene {
                 //player input
                 if (holding == true){
                     if (touchFlySide == true){
-                        //cap fly up speed
+                        //cap fly up speed and pew pew
                         let yVelo: Float
                         yVelo = Float(heli.physicsBody?.velocity.dy ?? CGFloat(0))
                         
@@ -151,9 +175,7 @@ class GameScene: SKScene {
                     }
                     else{
                         //pew pew
-                        heli.position = CGPoint(x: self.frame.midX-50, y: self.frame.midY)//25 - 100
-                        heli.physicsBody?.affectedByGravity = false
-                        heli.physicsBody?.velocity = CGVector(dx: 0.0, dy: 0.0)
+                        
                     }
                 }
                 else{
@@ -167,7 +189,7 @@ class GameScene: SKScene {
     }
     
     func WrapTileMap(){
-        let tileSize = 5400
+        let tileSize = 4500
         let d = heli.position.x - tileMap.position.x
         if (d > CGFloat(tileSize - (tileSize/10))){
             tileMap.position.x = heli.position.x
@@ -261,12 +283,12 @@ class GameScene: SKScene {
     }
     
     func CreateHeli(){
-        heli = SKSpriteNode(texture: SKTexture(imageNamed: "f1"), size: CGSize(width: 50, height: 50))
-        heli.position = CGPoint(x: 0, y: 0)//25 - 100
+        heli = SKSpriteNode(texture: SKTexture(imageNamed: "f1"), size: CGSize(width: 100, height: 100))
+        heli.position = CGPoint(x: -1000, y: 0)//25 - 100
         heli.zRotation = (-25.0 * CGFloat(Double.pi/180.0))
         
         //Add Physics
-        heli.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 50, height: 50))
+        heli.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
         heli.physicsBody?.affectedByGravity = false //only apply gravity once game starts
         heli.physicsBody?.isDynamic = true
         heli.physicsBody?.allowsRotation = false
