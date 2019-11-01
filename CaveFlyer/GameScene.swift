@@ -16,6 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let ceilingPlane: Int = -4300
     
     var obstacle: SKShapeNode!
+    var obstacle2: SKShapeNode!
     var ceiling: SKShapeNode!
     var ceilingVis: SKShapeNode!
     var floor: SKShapeNode!
@@ -71,7 +72,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         holding = true
         if (dead == false){
             if let location =  touches.first?.location(in: self.view){
-                if (location.x < self.frame.midX){ //user tapped on left side of screen
+                if (location.x < self.frame.midX || true){ //user tapped on left side of screen
                     touchFlySide = true //shoot and fly
                 }
                 else{ //user tapped on right side of screen
@@ -86,6 +87,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 if (location.x < self.frame.midX){ //Left Side = restart
                     heli.position = CGPoint(x: -1000, y: deathPlane+650)
                     heliSpeed = 10
+                    obstacle.position = CGPoint(x: -100000, y: 0)
+                    obstacle2.position = CGPoint(x: -100000, y: 0)
                     heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0) //Reset physics
                     tileMap.position.x = heli.position.x
                     scoreText.text = ""
@@ -189,14 +192,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             else{
                 
                 //Respawn obstacle
-                if (obstacle.position.x < (heli.position.x - CGFloat(1000))){
+                if (obstacle.position.x < (heli.position.x - CGFloat(900))){
 
                     //destroy node
                     obstacle.removeFromParent()
                     self.obstacle = nil
                     
                     //recreate node
-                    let mySize: CGSize = CGSize(width: CGFloat.random(in: 100 ..< 500), height: CGFloat.random(in: 100 ..< 500))
+                    let mySize: CGSize = CGSize(width: CGFloat.random(in: 100 ..< 1500), height: CGFloat.random(in: 100 ..< 400))
                     
                     obstacle = SKShapeNode(rectOf: mySize)
                     obstacle.fillColor = UIColor.red
@@ -212,6 +215,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     self.addChild(obstacle)
                 }
                 
+                //If we have reached our max speed increase obstcle count by 1
+                if (obstacle2.position.x < (heli.position.x - CGFloat(1100)) && heliSpeed! >= CGFloat(maxSpeed)){
+                    
+                    //destroy node
+                    obstacle2.removeFromParent()
+                    self.obstacle2 = nil
+                    
+                    //recreate node
+                    let mySize: CGSize = CGSize(width: CGFloat.random(in: 400 ..< 1500), height: CGFloat.random(in: 400 ..< 700))
+                    
+                    obstacle2 = SKShapeNode(rectOf: mySize)
+                    obstacle2.fillColor = UIColor.red
+                    obstacle2.position = heli.position
+                    obstacle2.position.x += 3500
+                    obstacle2.position.y = CGFloat.random(in: -5500 ..< -4300)
+                    obstacle2.physicsBody = SKPhysicsBody(rectangleOf: mySize)
+                    obstacle2.physicsBody?.affectedByGravity = false
+                    obstacle2.physicsBody?.isDynamic = false
+                    obstacle2.physicsBody?.categoryBitMask = BitMasks.kill;
+                    obstacle2.physicsBody?.contactTestBitMask = BitMasks.heli;
+                    
+                    self.addChild(obstacle2)
+                }
+                
                 
                 //player input
                 if (holding == true){
@@ -222,7 +249,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                         
                         if (yVelo < 500){
                             //fly up
-                            heli.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy:100.0))
+                            heli.physicsBody?.applyImpulse(CGVector(dx: 0.0, dy:150.0))
                             
                             print(heli.position.y)
                         }
@@ -282,7 +309,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         startGameText = SKLabelNode()
         startGameText.fontName = "Courier"
-        startGameText.text = "Tap to fly"
+        startGameText.text = "Hold to fly"
         startGameText.fontSize = 300.0
         startGameText.position = CGPoint(x: 0, y: deathPlane+650)
         startGameText.fontColor = UIColor.white
@@ -391,7 +418,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(floor)
         
         obstacle = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
-        obstacle.fillColor = UIColor.red
+        obstacle.fillColor = UIColor.darkGray
         obstacle.position = CGPoint(x: -100000, y: deathPlane*10)//hide it
         obstacle.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
         obstacle.physicsBody?.affectedByGravity = false
@@ -400,5 +427,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         obstacle.physicsBody?.contactTestBitMask = BitMasks.heli;
         
         self.addChild(obstacle)
+        
+        obstacle2 = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
+        obstacle2.fillColor = UIColor.darkGray
+        obstacle2.position = CGPoint(x: -100000, y: deathPlane*10)//hide it
+        obstacle2.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        obstacle2.physicsBody?.affectedByGravity = false
+        obstacle2.physicsBody?.isDynamic = false
+        obstacle2.physicsBody?.categoryBitMask = BitMasks.kill;
+        obstacle2.physicsBody?.contactTestBitMask = BitMasks.heli;
+        
+        self.addChild(obstacle2)
     }
 }
