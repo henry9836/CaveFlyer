@@ -54,7 +54,7 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         //self.backgroundColor = UIColor.gray
         holding = false
         touchFlySide = false
-        heliSpeed = 10
+        heliSpeed = 15
         
         physicsWorld.contactDelegate = self
         
@@ -359,9 +359,8 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         startGameText = SKLabelNode()
         startGameText.fontName = "Courier"
         startGameText.numberOfLines = 0
-        let oldScore = String(UserDefaults.standard.integer(forKey: "highScoreHard"))
-        startGameText.text = "Hard Mode\nHighscore: " + oldScore
-        startGameText.fontSize = 250.0
+        startGameText.text = "Impossible Mode\nHighscore:" + String(UserDefaults.standard.integer(forKey: "highScoreHard"))
+        startGameText.fontSize = 100.0
         startGameText.position = CGPoint(x: 0, y: deathPlane+650)
         startGameText.fontColor = UIColor.red
         self.addChild(startGameText) //parent to cam

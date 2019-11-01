@@ -79,7 +79,7 @@ class MainMenuScene: SKScene {
         self.addChild(playText)
         
         tutText = SKLabelNode()
-        tutText.text = "Hold For Hardmode"
+        tutText.text = "Hold For Impossible Mode"
         tutText.fontSize = 10.0
         tutText.fontName = "Copperplate"
         tutText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+80)
