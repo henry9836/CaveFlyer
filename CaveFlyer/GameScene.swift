@@ -15,6 +15,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let deathPlane: Int = -5500
     let ceilingPlane: Int = -4300
     
+    var obstacle: SKShapeNode!
     var ceiling: SKShapeNode!
     var ceilingVis: SKShapeNode!
     var floor: SKShapeNode!
@@ -184,7 +185,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 }
                 
             }
+            //game
             else{
+                
+                //Respawn obstacle
+                if (obstacle.position.x < (heli.position.x - CGFloat(1000))){
+
+                    //destroy node
+                    obstacle.removeFromParent()
+                    self.obstacle = nil
+                    
+                    //recreate node
+                    let mySize: CGSize = CGSize(width: CGFloat.random(in: 100 ..< 500), height: CGFloat.random(in: 100 ..< 500))
+                    
+                    obstacle = SKShapeNode(rectOf: mySize)
+                    obstacle.fillColor = UIColor.red
+                    obstacle.position = heli.position
+                    obstacle.position.x += 3500
+                    obstacle.position.y = CGFloat.random(in: -5500 ..< -4300)
+                    obstacle.physicsBody = SKPhysicsBody(rectangleOf: mySize)
+                    obstacle.physicsBody?.affectedByGravity = false
+                    obstacle.physicsBody?.isDynamic = false
+                    obstacle.physicsBody?.categoryBitMask = BitMasks.kill;
+                    obstacle.physicsBody?.contactTestBitMask = BitMasks.heli;
+                    
+                    self.addChild(obstacle)
+                }
+                
+                
                 //player input
                 if (holding == true){
                     if (touchFlySide == true){
@@ -201,7 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     }
                     else{
                         //pew pew
-                        
+
                     }
                 }
                 else{
@@ -362,5 +390,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(floor)
         
+        obstacle = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
+        obstacle.fillColor = UIColor.red
+        obstacle.position = CGPoint(x: -100000, y: deathPlane*10)//hide it
+        obstacle.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        obstacle.physicsBody?.affectedByGravity = false
+        obstacle.physicsBody?.isDynamic = false
+        obstacle.physicsBody?.categoryBitMask = BitMasks.kill;
+        obstacle.physicsBody?.contactTestBitMask = BitMasks.heli;
+        
+        self.addChild(obstacle)
     }
 }
