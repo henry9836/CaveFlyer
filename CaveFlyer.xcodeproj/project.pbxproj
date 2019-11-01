@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		C310B1C6235E53F200513D12 /* Example.sks in Resources */ = {isa = PBXBuildFile; fileRef = C310B1C5235E53F200513D12 /* Example.sks */; };
+		C36116A4236BC7A6001B9F47 /* HardGameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36116A3236BC7A6001B9F47 /* HardGameScene.swift */; };
 		C3842729235CFB4200E30A44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3842728235CFB4200E30A44 /* AppDelegate.swift */; };
 		C384272F235CFB4200E30A44 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384272E235CFB4200E30A44 /* GameScene.swift */; };
 		C3842731235CFB4200E30A44 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3842730235CFB4200E30A44 /* GameViewController.swift */; };
@@ -17,7 +18,6 @@
 		C3842744235CFB4300E30A44 /* CaveFlyerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3842743235CFB4300E30A44 /* CaveFlyerTests.swift */; };
 		C384274F235CFB4300E30A44 /* CaveFlyerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384274E235CFB4300E30A44 /* CaveFlyerUITests.swift */; };
 		C384275D235CFFC000E30A44 /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = C384275C235CFFC000E30A44 /* MainMenu.swift */; };
-		C3842761235D122B00E30A44 /* Tutorial.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3842760235D122B00E30A44 /* Tutorial.swift */; };
 		C3CFC2DF235E565C005E4CF1 /* MyTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3CFC2DE235E565C005E4CF1 /* MyTileSet.sks */; };
 		C3CFC2E1235E5AF3005E4CF1 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = C3CFC2E0235E5AF3005E4CF1 /* GameScene.sks */; };
 /* End PBXBuildFile section */
@@ -41,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		C310B1C5235E53F200513D12 /* Example.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Example.sks; sourceTree = "<group>"; };
+		C36116A3236BC7A6001B9F47 /* HardGameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HardGameScene.swift; sourceTree = "<group>"; };
 		C3842725235CFB4200E30A44 /* CaveFlyer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaveFlyer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C3842728235CFB4200E30A44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C384272E235CFB4200E30A44 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -56,7 +57,6 @@
 		C384274E235CFB4300E30A44 /* CaveFlyerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaveFlyerUITests.swift; sourceTree = "<group>"; };
 		C3842750235CFB4300E30A44 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C384275C235CFFC000E30A44 /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenu.swift; sourceTree = "<group>"; };
-		C3842760235D122B00E30A44 /* Tutorial.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tutorial.swift; sourceTree = "<group>"; };
 		C3CFC2DE235E565C005E4CF1 /* MyTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = MyTileSet.sks; sourceTree = "<group>"; };
 		C3CFC2E0235E5AF3005E4CF1 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -111,7 +111,6 @@
 			children = (
 				C3842728235CFB4200E30A44 /* AppDelegate.swift */,
 				C384275C235CFFC000E30A44 /* MainMenu.swift */,
-				C3842760235D122B00E30A44 /* Tutorial.swift */,
 				C384272E235CFB4200E30A44 /* GameScene.swift */,
 				C3842730235CFB4200E30A44 /* GameViewController.swift */,
 				C3842732235CFB4200E30A44 /* Main.storyboard */,
@@ -121,6 +120,7 @@
 				C310B1C5235E53F200513D12 /* Example.sks */,
 				C3CFC2DE235E565C005E4CF1 /* MyTileSet.sks */,
 				C3CFC2E0235E5AF3005E4CF1 /* GameScene.sks */,
+				C36116A3236BC7A6001B9F47 /* HardGameScene.swift */,
 			);
 			path = CaveFlyer;
 			sourceTree = "<group>";
@@ -281,7 +281,7 @@
 				C3842731235CFB4200E30A44 /* GameViewController.swift in Sources */,
 				C3842729235CFB4200E30A44 /* AppDelegate.swift in Sources */,
 				C384275D235CFFC000E30A44 /* MainMenu.swift in Sources */,
-				C3842761235D122B00E30A44 /* Tutorial.swift in Sources */,
+				C36116A4236BC7A6001B9F47 /* HardGameScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

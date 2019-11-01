@@ -14,6 +14,7 @@ class MainMenuScene: SKScene {
     var playText: SKLabelNode!
     var tutText: SKLabelNode!
     var heli: SKSpriteNode!
+    var longPressed: Bool = false
     var longPressGestureRecognizer = UILongPressGestureRecognizer()
     var tapGestureRecognizer = UITapGestureRecognizer()
     
@@ -27,10 +28,13 @@ class MainMenuScene: SKScene {
     
     //Gesture Inputs
     @objc func longPress(sender: UILongPressGestureRecognizer){
-        let newScene = TutorialScene(size: (self.view?.bounds.size)!)
-        let transition = SKTransition.reveal(with: .down, duration: 0.2)
-        self.view?.presentScene(newScene, transition: transition)
-        transition.pausesOutgoingScene = true
+        if (longPressed == false){
+            let newScene = HardGameScene(size: (self.view?.bounds.size)!)
+            let transition = SKTransition.reveal(with: .down, duration: 0.2)
+            self.view?.presentScene(newScene, transition: transition)
+            transition.pausesOutgoingScene = true
+            longPressed = true
+        }
     }
     
     @objc func tap(sender: UITapGestureRecognizer){
@@ -75,7 +79,7 @@ class MainMenuScene: SKScene {
         self.addChild(playText)
         
         tutText = SKLabelNode()
-        tutText.text = "Hold For Tutorial"
+        tutText.text = "Hold For Hardmode"
         tutText.fontSize = 10.0
         tutText.fontName = "Copperplate"
         tutText.position = CGPoint(x: self.frame.midX, y: self.frame.midY+80)
