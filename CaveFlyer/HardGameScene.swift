@@ -17,6 +17,8 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
     
     var obstacle: SKShapeNode!
     var obstacle2: SKShapeNode!
+    var obstacle3: SKShapeNode!
+    var obstacle4: SKShapeNode!
     var ceiling: SKShapeNode!
     var ceilingVis: SKShapeNode!
     var floor: SKShapeNode!
@@ -32,7 +34,7 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
     var touchFlySide: Bool? //true = flyUp, //false = shoot
     var gameStarted: Bool = false
     var heliSpeed: CGFloat?
-    let maxSpeed: Int = 40
+    let maxSpeed: Int = 50
     var dead: Bool = false
     
     enum BitMasks{
@@ -91,6 +93,7 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
                     heli.physicsBody?.velocity = CGVector(dx: 0, dy: 0) //Reset physics
                     tileMap.position.x = heli.position.x
                     scoreText.text = ""
+                    startGameText.text = "Hard Mode\nHighscore: " + String(UserDefaults.standard.integer(forKey: "highScoreHard"))
                     dead = false
                 }
                 else{ //Right Side = Quit to main menu
@@ -177,14 +180,14 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
                     let score = (Int(heli.position.x+1000)/10)
                     
                     //Set current score
-                    UserDefaults.standard.set(score, forKey: "currentScore")
+                    UserDefaults.standard.set(score, forKey: "currentScoreHard")
                     //Check Highscore
-                    if (UserDefaults.standard.integer(forKey: "highScore") < score){
-                        UserDefaults.standard.set(score, forKey: "highScore")
+                    if (UserDefaults.standard.integer(forKey: "highScoreHard") < score){
+                        UserDefaults.standard.set(score, forKey: "highScoreHard")
                         scoreText.text = "Gameover\nNew HighScore!\nScore: " + String(score)
                     }
                     else{
-                        scoreText.text = "Gameover\nScore: " + String(score) + "\n\nHighscore: " + String(UserDefaults.standard.integer(forKey: "highScore"))
+                        scoreText.text = "Gameover\nScore: " + String(score) + "\n\nHighscore: " + String(UserDefaults.standard.integer(forKey: "highScoreHard"))
                     }
                 }
                 
@@ -215,9 +218,7 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
                     
                     self.addChild(obstacle)
                 }
-                
-                //If we have reached our max speed increase obstcle count by 1
-                if (obstacle2.position.x < (heli.position.x - CGFloat(1100)) && heliSpeed! >= CGFloat(maxSpeed)){
+                if (obstacle2.position.x < (heli.position.x - CGFloat(1100))){
                     
                     //destroy node
                     obstacle2.removeFromParent()
@@ -239,7 +240,51 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
                     
                     self.addChild(obstacle2)
                 }
-                
+                //If we have reached our max speed increase obstcle count by 2
+                if (obstacle3.position.x < (heli.position.x - CGFloat(1400)) && heliSpeed! >= CGFloat(maxSpeed)){
+                    
+                    //destroy node
+                    obstacle3.removeFromParent()
+                    self.obstacle3 = nil
+                    
+                    //recreate node
+                    let mySize: CGSize = CGSize(width: CGFloat.random(in: 400 ..< 1500), height: CGFloat.random(in: 400 ..< 700))
+                    
+                    obstacle3 = SKShapeNode(rectOf: mySize)
+                    obstacle3.fillColor = UIColor.red
+                    obstacle3.position = heli.position
+                    obstacle3.position.x += 3500
+                    obstacle3.position.y = CGFloat.random(in: -5500 ..< -4300)
+                    obstacle3.physicsBody = SKPhysicsBody(rectangleOf: mySize)
+                    obstacle3.physicsBody?.affectedByGravity = false
+                    obstacle3.physicsBody?.isDynamic = false
+                    obstacle3.physicsBody?.categoryBitMask = BitMasks.kill;
+                    obstacle3.physicsBody?.contactTestBitMask = BitMasks.heli;
+                    
+                    self.addChild(obstacle3)
+                }
+                if (obstacle4.position.x < (heli.position.x - CGFloat(1600)) && heliSpeed! >= CGFloat(maxSpeed)){
+                    
+                    //destroy node
+                    obstacle4.removeFromParent()
+                    self.obstacle4 = nil
+                    
+                    //recreate node
+                    let mySize: CGSize = CGSize(width: CGFloat.random(in: 400 ..< 1500), height: CGFloat.random(in: 400 ..< 700))
+                    
+                    obstacle4 = SKShapeNode(rectOf: mySize)
+                    obstacle4.fillColor = UIColor.red
+                    obstacle4.position = heli.position
+                    obstacle4.position.x += 3500
+                    obstacle4.position.y = CGFloat.random(in: -5500 ..< -4300)
+                    obstacle4.physicsBody = SKPhysicsBody(rectangleOf: mySize)
+                    obstacle4.physicsBody?.affectedByGravity = false
+                    obstacle4.physicsBody?.isDynamic = false
+                    obstacle4.physicsBody?.categoryBitMask = BitMasks.kill;
+                    obstacle4.physicsBody?.contactTestBitMask = BitMasks.heli;
+                    
+                    self.addChild(obstacle4)
+                }
                 
                 //player input
                 if (holding == true){
@@ -313,10 +358,12 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         
         startGameText = SKLabelNode()
         startGameText.fontName = "Courier"
-        startGameText.text = "Hold to fly"
-        startGameText.fontSize = 300.0
+        startGameText.numberOfLines = 0
+        let oldScore = String(UserDefaults.standard.integer(forKey: "highScoreHard"))
+        startGameText.text = "Hard Mode\nHighscore: " + oldScore
+        startGameText.fontSize = 250.0
         startGameText.position = CGPoint(x: 0, y: deathPlane+650)
-        startGameText.fontColor = UIColor.white
+        startGameText.fontColor = UIColor.red
         self.addChild(startGameText) //parent to cam
     }
     
@@ -373,7 +420,7 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         heli.zRotation = (-25.0 * CGFloat(Double.pi/180.0))
         
         //Add Physics
-        heli.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        heli.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 50))
         heli.physicsBody?.affectedByGravity = false //only apply gravity once game starts
         heli.physicsBody?.isDynamic = true
         heli.physicsBody?.allowsRotation = false
@@ -442,5 +489,27 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         obstacle2.physicsBody?.contactTestBitMask = BitMasks.heli;
         
         self.addChild(obstacle2)
+        
+        obstacle3 = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
+        obstacle3.fillColor = UIColor.darkGray
+        obstacle3.position = CGPoint(x: -100000, y: deathPlane*10)//hide it
+        obstacle3.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        obstacle3.physicsBody?.affectedByGravity = false
+        obstacle3.physicsBody?.isDynamic = false
+        obstacle3.physicsBody?.categoryBitMask = BitMasks.kill;
+        obstacle3.physicsBody?.contactTestBitMask = BitMasks.heli;
+        
+        self.addChild(obstacle3)
+        
+        obstacle4 = SKShapeNode(rectOf: CGSize(width: 100, height: 100))
+        obstacle4.fillColor = UIColor.darkGray
+        obstacle4.position = CGPoint(x: -100000, y: deathPlane*10)//hide it
+        obstacle4.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        obstacle4.physicsBody?.affectedByGravity = false
+        obstacle4.physicsBody?.isDynamic = false
+        obstacle4.physicsBody?.categoryBitMask = BitMasks.kill;
+        obstacle4.physicsBody?.contactTestBitMask = BitMasks.heli;
+        
+        self.addChild(obstacle4)
     }
 }

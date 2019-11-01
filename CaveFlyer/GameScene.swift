@@ -369,7 +369,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         heli.zRotation = (-25.0 * CGFloat(Double.pi/180.0))
         
         //Add Physics
-        heli.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 100))
+        heli.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 100, height: 50))
         heli.physicsBody?.affectedByGravity = false //only apply gravity once game starts
         heli.physicsBody?.isDynamic = true
         heli.physicsBody?.allowsRotation = false
