@@ -62,6 +62,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         CreateHeli()
         CreateShapes()
         CreateText()
+        PlayMusic()
        
     }
     
@@ -439,4 +440,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(obstacle2)
     }
+    
+    func PlayMusic(){
+        let audioNode = SKAudioNode(fileNamed: "music.mp3")
+        audioNode.autoplayLooped = true
+        self.addChild(audioNode)
+        audioNode.run(SKAction.play())
+    }
+    
 }

@@ -63,6 +63,7 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         CreateHeli()
         CreateShapes()
         CreateText()
+        PlayMusic()
         
     }
     
@@ -510,5 +511,12 @@ class HardGameScene: SKScene, SKPhysicsContactDelegate {
         obstacle4.physicsBody?.contactTestBitMask = BitMasks.heli;
         
         self.addChild(obstacle4)
+    }
+    
+    func PlayMusic(){
+        let audioNode = SKAudioNode(fileNamed: "music.mp3")
+        audioNode.autoplayLooped = true
+        self.addChild(audioNode)
+        audioNode.run(SKAction.play())
     }
 }
